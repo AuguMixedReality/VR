@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class CameraController : MonoBehaviour {
@@ -7,8 +8,14 @@ public class CameraController : MonoBehaviour {
 
 	GameObject cam;
 	GameObject slides;
+	GameObject slideObject;
 	
 	RaycastHit rayHit;
+	
+	GameObject[] raises;
+	GameObject[] rotates;
+	GameObject[] fades;
+
 	
 	public Quaternion toAngle;
 	
@@ -19,10 +26,16 @@ public class CameraController : MonoBehaviour {
 		cam = GameObject.Find("CardboardMain");
 		slides = GameObject.Find("Slides");
 
-		pos = new[] {new Vector3( 13, 11, -950 ),
-			new Vector3 (13, 11, -440 )};
+		pos = new[] {new Vector3( 13, 15, -990 ),
+			new Vector3 (13, 15, -470 )};
 			
 		cam.transform.position = pos[0];
+		
+		
+		// Set Raises and Rotates
+		raises = GameObject.FindGameObjectsWithTag("Raise");
+		rotates = GameObject.FindGameObjectsWithTag("Rotate");
+		fades = GameObject.FindGameObjectsWithTag("Fade");
 		
 
 	}
@@ -66,12 +79,75 @@ public class CameraController : MonoBehaviour {
 		{
 			Debug.Log("displaying panels 1");
 			
-			GameObject house = GameObject.Find("Slides/Slide1/HouseCollider");
-			rotateUp(house);
-			GameObject tree = GameObject.Find("Slides/Slide1/TreeCollider");
-			raiseUp(tree);
+			// slideObject = GameObject.Find("Slides/Slide1");
+			
+			
+			// GameObject house = GameObject.Find("Slides/Slide1/HouseCollider");
+			// rotateUp(house);
+			
+			
+			foreach(GameObject raise in raises)
+			{
+				
+				// GameObject tree = GameObject.Find("Slides/Slide1/TreeCollider");
+				if(raise.transform.parent.gameObject.name == "Slide1")
+				{
+					raiseUp(raise);
+				}
+
+			}
+			
+			foreach(GameObject rotate in rotates)
+			{
+				if(rotate.transform.parent.gameObject.name == "Slide1")
+				{
+					rotateUp(rotate);
+				}
+			}
+			
+			foreach(GameObject fade in fades)
+			{
+				if(fade.transform.parent.gameObject.name == "Slide1")
+				{
+					Debug.Log("Fading!");
+					// fade.GetComponent<Text>().CrossFadeAlpha(0f,1f,false);
+					// fadeIn(fade);
+				}
+			}
+			
+			
 		}
 	}
+	
+	void fadeIn(GameObject obj)
+	{
+		StartCoroutine(fadingIn(obj,0f, 1f));
+	}
+	
+	IEnumerator fadingIn(GameObject canvas, float endAlpha,float time)
+	{
+		Text t = canvas.GetComponent<Text>();
+		while(t.color.a != endAlpha)
+		{
+			t.CrossFadeAlpha(endAlpha,time,false);
+			yield return null;
+		}
+		Debug.Log("Fade done!");
+	}
+	
+	/* IEnumerator fadingIn(GameObject obj, float endAlpha, float time)
+	{
+
+		Color startColor = obj.transform.GetComponent<Renderer>().material.color;
+		float startAlpha = startColor.a;
+		
+		for(float t=0.0f; t<1.0f; t+= Time.deltaTime/time)
+		{
+			Color newColor = new Color(startColor.r,startColor.g,startColor.b, Mathf.Lerp(startAlpha,endAlpha,t));
+			obj.transform.GetComponent<Renderer>().material.color = newColor;
+			yield return null;
+		}
+	} */
 	
 	void rotateUp(GameObject obj)
 	{
