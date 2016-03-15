@@ -74,6 +74,7 @@
      <Compile Include="Assets\Cardboard\Scripts\VRDevices\UnityEditorDevice.cs" />
      <Compile Include="Assets\Controllers\CameraController.cs" />
      <Compile Include="Assets\Controllers\MLK1Controller.cs" />
+     <Compile Include="Assets\Scripts\SlidesController.cs" />
      <None Include="Assets\Cardboard\Resources\SkyboxMesh.shader" />
      <None Include="Assets\Cardboard\Distortion\CardboardDistortion.cginc" />
      <None Include="Assets\Cardboard\Resources\UnlitTexture.shader" />
